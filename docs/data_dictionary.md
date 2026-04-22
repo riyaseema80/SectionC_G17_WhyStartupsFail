@@ -6,7 +6,7 @@
 **Source:** Kaggle — [investments_VC.csv](https://www.kaggle.com/datasets/arindam235/startup-investments-crunchbase)  
 **Unit of Analysis (Grain):** One row represents one startup entity (not individual funding rounds).  
 **Row Count (raw):** 54,294  
-**Row Count (cleaned):** 28,534 (after ETL)  
+**Row Count (cleaned):** 33,613 (after ETL)  
 **Time Period:** 1990 – 2014 (founded year)  
 
 ---
@@ -67,7 +67,6 @@
 | `is_usa` | binary (0/1) | `1 if country_code == 'USA'` | Controls for ecosystem effect |
 | `primary_category` | string | Extracted as the first non-empty value from the pipe-separated `category_list` (typically index 1 due to the leading pipe delimiter) | Simplified sector filter for Tableau |
 | `is_closed` | binary (0/1) | `1 if status == 'closed'` | **Target variable** — binary failure indicator |
-| `reached_series_a` | binary (0/1) | `1 if round_A > 0 OR round_B > 0 OR round_C > 0` | Survival inflection-point indicator |
 | `founding_decade` | integer | `(founded_year // 10) * 10` | Decade-level cohort grouping for time analysis |
 | `funding_tier` | string | Bucket `funding_total_usd` into tiers (e.g., Low / Medium / High) | Simplifies segmentation analysis |
 | `has_seed` | binary (0/1) | `1 if seed > 0` | Early-stage funding indicator |
@@ -76,18 +75,18 @@
 
 ## Final Dataset (Post-ETL)
 
-**Final cleaned dataset:** `data/processed/cleaned.csv`  
-**Total Columns:** 47  
-**Total Rows:** 28,534  
+**Final cleaned dataset:** `data/processed/startups_cleaned.csv`  
+**Total Columns:** 48  
+**Total Rows:** 33,613  
 
 ### Column Categories
 
-- **Identifiers:** `name` (`permalink` exists in the raw source but was dropped from the final cleaned export because it is a non-analytical identifier)
+- **Identifiers:** `name`, `permalink`
 - **Target:** `is_closed`
 - **Numerical:** `funding_total_usd`, `funding_rounds`, `avg_funding_per_round`, `days_to_first_funding`, `funding_duration_days`, funding-stage amount columns (`seed` to `round_H`)
-- **Categorical:** `status`, `market`, `country_code`, `state_code`, `region`, `city`, `primary_category`, `funding_tier`
+- **Categorical:** `status`, `market`, `country_code`, `state_code`, `region`, `city`, `primary_category`, `funding_tier`, `category_list`
 - **Time:** `founded_at`, `founded_month`, `founded_quarter`, `founded_year`, `first_funding_at`, `last_funding_at`, `founding_decade`
-- **Binary:** `is_usa`, `reached_series_a`, `has_seed`
+- **Binary:** `is_usa`, `has_seed`
 
 This dataset serves as the single source of truth for all downstream EDA, statistical analysis, and modeling.
 
@@ -108,11 +107,11 @@ This dataset serves as the single source of truth for all downstream EDA, statis
 | Step | Action |
 |---|---|
 | Column trimming | Removed leading/trailing whitespace from text fields such as `market` and status labels |
-| Funding column | Converted `funding_total_usd` from string to numeric float after removing commas and placeholder symbols |
+| Funding conversion | Converted funding fields from string to numeric format using vectorised parsing after removing commas and placeholder symbols |
 | Dates | Parsed `founded_at`, `first_funding_at`, and `last_funding_at` to datetime |
 | Missing status | Dropped records with missing startup status because the target variable could not be derived |
-| Duplicates | Removed duplicate startup records during ETL |
-| Outliers | Filtered `founded_year` to the final valid range of `1990-2014` |
+| Duplicate enforcement | Enforced the project grain of one row per startup by removing duplicate startup records |
+| Outliers | Removed extreme funding observations above the top 1% threshold and filtered `founded_year` to the final valid range of `1990-2014` |
 
 ---
 
@@ -148,7 +147,7 @@ Missing values in non-critical fields such as `region` and `city` were retained 
 | `is_closed` | Target / outcome variable | Overall Failure Rate |
 | `funding_total_usd` | Primary continuous predictor | Funding Gap (Closed vs Operating) |
 | `funding_rounds` | Count predictor | Avg Rounds by Status |
-| `reached_series_a` | Binary predictor | Series A Failure Rate differential |
+| `funding_tier` | Segmentation variable | Failure Rate by Funding Band |
 | `market` | Categorical grouping | Failure Rate by Sector |
 | `country_code` | Geographic grouping | Geographic Failure Heatmap |
 | `founded_year` | Time dimension | Failure Rate Trend Over Time |

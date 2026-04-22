@@ -77,10 +77,12 @@ The global startup ecosystem is characterised by a well-known but poorly underst
 | **Source Name** | Crunchbase Startup Investments (via Kaggle) |
 | **Direct Access Link** | [Kaggle — Startup Investments Crunchbase](https://www.kaggle.com/datasets/arindam235/startup-investments-crunchbase) |
 | **Row Count (raw)** | 54,294 |
-| **Row Count (cleaned)** | ~40,000–45,000 |
-| **Column Count** | 39 raw + 8 engineered = 47 total |
-| **Time Period Covered** | ~1990 – 2023 (founding year) |
+| **Row Count (cleaned)** | 33,613 |
+| **Column Count** | 39 retained raw columns + 9 engineered columns = 48 total |
+| **Time Period Covered** | 1990 – 2014 (founding year) |
 | **Format** | CSV |
+
+The final processed dataset reflects the current ETL rules in `scripts/etl_pipeline.py`, including one-row-per-startup enforcement, removal of extreme funding outliers above the top 1% threshold, and the addition of one new engineered analytical field.
 
 **Key Columns Used**
 
@@ -92,9 +94,9 @@ The global startup ecosystem is characterised by a well-known but poorly underst
 | `market` | Primary sector/industry | Categorical grouping |
 | `country_code` | ISO country code | Geographic filter |
 | `founded_year` | Year company was founded | Time dimension |
-| `round_A` | Series A funding amount | Survival signal feature |
+| `round_a` | Series A funding amount | Funding-stage feature |
 | `is_closed` *(engineered)* | Binary target: 1 = closed, 0 = other | Logistic regression target |
-| `reached_series_a` *(engineered)* | Binary: 1 = any Series A+ round | Inflection-point indicator |
+| `funding_tier` *(engineered)* | Funding band derived from total capital raised | Segmentation and cohort analysis |
 
 For full column definitions, see [`docs/data_dictionary.md`](docs/data_dictionary.md).
 
@@ -106,7 +108,7 @@ For full column definitions, see [`docs/data_dictionary.md`](docs/data_dictionar
 |---|---|---|
 | **Overall Failure Rate (%)** | Percentage of all startups that permanently closed | `closed_count / total_count × 100` |
 | **Funding Gap ($)** | Median funding difference between operating and closed startups | `median(operating funding) − median(closed funding)` |
-| **Series A Survival Differential (%)** | Failure rate gap between pre-Series A and post-Series A startups | `failure_rate(no Series A) − failure_rate(reached Series A)` |
+| **Funding Band Failure Differential (%)** | Failure rate gap across funding tiers after ETL segmentation | `failure_rate(highest tier) − failure_rate(lowest tier)` |
 | **Sector Failure Index** | Ranked failure rate per market sector (min. 50 startups) | `closed_in_sector / total_in_sector × 100` |
 | **Avg Funding Rounds by Outcome** | Mean number of rounds per status group | `mean(funding_rounds) grouped by status` |
 | **Capital Efficiency Ratio** | Average USD raised per funding round | `funding_total_usd / funding_rounds` |
@@ -170,6 +172,9 @@ SectionC_G17_WhyStartupsFail/
 │   │   └── investments_VC.csv
 │   └── processed/                   ← Cleaned ETL outputs
 │       ├── startups_cleaned.csv
+│       ├── startups_cleaned.parquet
+│       ├── missing_report.csv
+│       ├── etl_metadata.json
 │       ├── tableau_master.csv
 │       ├── kpi_summary.csv
 │       ├── country_level_summary.csv
@@ -210,7 +215,7 @@ SectionC_G17_WhyStartupsFail/
 |---|---|---|
 | 1 | **Define** | Sector selected (VC/Finance), problem statement scoped, mentor approval obtained (Gate 1) |
 | 2 | **Extract** | Raw dataset sourced (54,294 rows), committed to `data/raw/`; data dictionary drafted |
-| 3 | **Clean & Transform** | 10-step Python ETL pipeline in `notebooks/02_cleaning.ipynb` and `scripts/etl_pipeline.py` |
+| 3 | **Clean & Transform** | Production ETL pipeline in `notebooks/02_cleaning.ipynb` and `scripts/etl_pipeline.py`, including duplicate enforcement, outlier filtering, validation checks, and engineered feature creation |
 | 4 | **Analyze** | EDA (8 visualisations) + 6 statistical analyses in notebooks 03 and 04 |
 | 5 | **Visualize** | Interactive Tableau dashboard built and published on Tableau Public |
 | 6 | **Recommend** | 5 data-backed business recommendations delivered with expected impact |
