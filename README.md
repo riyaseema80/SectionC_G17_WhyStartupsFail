@@ -60,8 +60,8 @@
 |  Data Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
 |  ETL Lead | Vachan Gupta | [@VachanGupta](https://github.com/VachanGupta) |
 |  Analysis Lead | Rashmi Anand | [@rashmi06an](https://github.com/rashmi06an) |
-|  Visualization Lead | Rashmi Anand | [@rashmi06an](https://github.com/rashmi06an) |
-|  PPT and Quality Lead | Rashmi Anand | [@rashmi06an](https://github.com/rashmi06an) |
+|  Visualization Lead | Abhinav Choundhary | [@itsabhi-21](https://github.com/itsabhi-21) |
+|  PPT and Quality Lead | Vansh Panwar | [@vanshp018](https://github.com/vanshp018) |
 |  Strategy Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
 
 
