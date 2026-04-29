@@ -14,12 +14,12 @@ This directory showcases the Data Visualization & Analytics (DVA) portfolios of 
 
 ### 2. [Contributor 2 Name]
 - **Portfolio:** https://dva-portfolio-wyd2.vercel.app/
-- **Role:** [ETL & Data Cleaning, EDA & Analysis, Statistical Analysis, Tableau Dashboarding, Reporting, Presentation]
+- **Role:** [Statistical Analysis, Tableau Dashboarding, Reporting, Presentation]
 
 
-### 3. [Contributor 3 Name]
+### 3. [Vachan Gupta]
 - **Portfolio:** [Link to portfolio/GitHub/LinkedIn/Website]
-- **Role:** [Primary role in the project]
+- **Role:** [ETL & Data Cleaning, EDA & Analysis]
 
 
 ### 4. [Contributor 4 Name]
