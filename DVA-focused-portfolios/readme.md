@@ -13,8 +13,8 @@ This directory showcases the Data Visualization & Analytics (DVA) portfolios of 
 
 
 ### 2. [Contributor 2 Name]
-- **Portfolio:** [Link to portfolio/GitHub/LinkedIn/Website]
-- **Role:** [Primary role in the project]
+- **Portfolio:** https://dva-portfolio-wyd2.vercel.app/
+- **Role:** [ETL & Data Cleaning, EDA & Analysis, Statistical Analysis, Tableau Dashboarding, Reporting, Presentation]
 
 
 ### 3. [Contributor 3 Name]
