@@ -12,7 +12,7 @@ This directory showcases the Data Visualization & Analytics (DVA) portfolios of 
 - **Role:** Exploratory Data Analysis , PPT and Quality Lead
 
 
-### 2. [Contributor 2 Name]
+### 2. [Rashmi]
 - **Portfolio:** https://dva-portfolio-wyd2.vercel.app/
 - **Role:** [Statistical Analysis, Tableau Dashboarding, Reporting, Presentation]
 
